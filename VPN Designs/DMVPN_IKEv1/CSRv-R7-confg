@@ -1,0 +1,272 @@
+
+!
+! Last configuration change at 19:33:56 UTC Thu Dec 27 2018
+!
+version 16.9
+service timestamps debug datetime msec
+service timestamps log datetime msec
+platform qfp utilization monitor load 80
+no platform punt-keepalive disable-kernel-core
+platform console serial
+!
+hostname CSRv-R7
+!
+boot-start-marker
+boot-end-marker
+!
+!
+vrf definition UNDERLAY
+ rd 1:1
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+!
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+ip admission watch-list expiry-time 0
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+subscriber templating
+! 
+! 
+! 
+! 
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+crypto pki trustpoint TP-self-signed-2127182822
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-2127182822
+ revocation-check none
+ rsakeypair TP-self-signed-2127182822
+!
+!
+crypto pki certificate chain TP-self-signed-2127182822
+ certificate self-signed 01
+  30820330 30820218 A0030201 02020101 300D0609 2A864886 F70D0101 05050030 
+  31312F30 2D060355 04031326 494F532D 53656C66 2D536967 6E65642D 43657274 
+  69666963 6174652D 32313237 31383238 3232301E 170D3138 31323237 31373334 
+  35335A17 0D333030 31303130 30303030 305A3031 312F302D 06035504 03132649 
+  4F532D53 656C662D 5369676E 65642D43 65727469 66696361 74652D32 31323731 
+  38323832 32308201 22300D06 092A8648 86F70D01 01010500 0382010F 00308201 
+  0A028201 0100A644 8F0E447D EB5FBE79 E4320493 6831C7D6 C06708CE 14093A6E 
+  4B9F29ED 2AC04870 56CB5E48 50069595 C409E65D 13D28F7D DA12E2F2 56BB5482 
+  DD8C04B0 6037ECCB C066167F E695DEB3 ED324AAE 3FECC236 C3C87176 E65BA31B 
+  EB833EE6 1FD4DDAB 9F60DC48 90C3F50D 6D2F957C 3F3F9C16 E7B92850 9CD7B3A2 
+  B3B6F384 BE2D3167 78B8BB28 A0CC6D7F B141D65A 56D32923 94AB9421 C4A5905D 
+  DB0D6560 D915D989 9B55C829 E9EC01EA 82FCEB07 7C633B56 F1108DB3 113D18F8 
+  0CF2E40E 27387D3F E62A70A1 C7F5E6D6 6AB6A1CF C94CA3C8 A9F51FC8 03E4F1EB 
+  AACE9387 0EA5964D 9786E45A 795D3E88 21DE0824 182F9AF3 0CC47E96 3993E26E 
+  8A94E5BC CDA10203 010001A3 53305130 0F060355 1D130101 FF040530 030101FF 
+  301F0603 551D2304 18301680 1452D1FF 27C1398B D7FE1088 74336D6A 5A9184E3 
+  07301D06 03551D0E 04160414 52D1FF27 C1398BD7 FE108874 336D6A5A 9184E307 
+  300D0609 2A864886 F70D0101 05050003 82010100 392A5A52 B29A4BF0 0A098FC2 
+  7F95A749 65D12B58 527063FC 07514BC0 EFE22A12 490BFF09 6611B0EF 864D2F5D 
+  8C1C2B22 A2D67D5E CEF357D7 9A7A063A 93BACD1C 3FDC72CF 0C2F2C15 9FC433E4 
+  B0DC1474 52372B71 2473D9A2 0E884BF3 EE12C2E0 871B7BF5 0F545EE8 C82F09AD 
+  17E347EB C59EE49B 1AE74DAF A4010C9A 76FCED7C E92C5BC3 049B30E6 E3CC8C40 
+  E7D5A7D4 712137E3 C13F2DA2 CD38BE09 8DB7F3C9 FE5E340F F5B8AC09 9B071905 
+  9B2B01AE 776B6051 A05B55AB AF466257 82B81789 3EB5FAB2 8069C8D2 EDF1F691 
+  EEACDD41 7781FD09 814AC3B9 91E739B4 3632B064 8F0C1747 2B6A3E31 7B328D57 
+  DD387864 C9806E82 3C3770B9 0588A789 6DD3233C
+  	quit
+!
+!
+!
+!
+!
+!
+!
+!
+license udi pid CSR1000V sn 9NFZVNFYU38
+no license smart enable
+diagnostic bootup level minimal
+!
+spanning-tree extend system-id
+!
+!
+!
+!
+redundancy
+!
+!
+!
+!
+!
+!
+! 
+crypto keyring DMVPN_KEYRING vrf UNDERLAY 
+  pre-shared-key address 50.1.10.1 key cisco
+  pre-shared-key address 50.1.20.2 key cisco
+  pre-shared-key address 50.1.10.0 255.255.255.0 key cisco
+  pre-shared-key address 50.1.20.0 255.255.255.0 key cisco
+!
+!
+!
+!
+!
+!
+crypto isakmp policy 10
+ encr aes 256
+ hash sha384
+ authentication pre-share
+ group 15
+!
+!
+crypto ipsec transform-set DMVPN_TRANSFORM_SET esp-aes 256 esp-sha384-hmac 
+ mode transport
+!
+crypto ipsec profile DMVPN_PROFILE
+ set transform-set DMVPN_TRANSFORM_SET 
+!
+!
+!
+!
+!
+!
+! 
+! 
+!
+!
+interface Loopback0
+ ip address 50.1.1.7 255.255.255.255
+ ipv6 address 2001:50:1:1::7/128
+!
+interface Tunnel0
+ ip address 10.1.1.7 255.255.255.0
+ no ip redirects
+ ip mtu 1400
+ ip nhrp authentication NHRP
+ ip nhrp map 10.1.1.1 50.1.10.1
+ ip nhrp map multicast 50.1.10.1
+ ip nhrp network-id 1
+ ip nhrp nhs 10.1.1.1
+ ip tcp adjust-mss 1360
+ tunnel source GigabitEthernet1.10
+ tunnel mode gre multipoint
+ tunnel key 1
+ tunnel vrf UNDERLAY
+ tunnel protection ipsec profile DMVPN_PROFILE
+!
+interface Tunnel1
+ ip address 10.1.2.7 255.255.255.0
+ no ip redirects
+ ip mtu 1400
+ ip nhrp authentication NHRP
+ ip nhrp map multicast 50.1.20.2
+ ip nhrp map 10.1.2.2 50.1.20.2
+ ip nhrp network-id 2
+ ip nhrp nhs 10.1.2.2
+ ip tcp adjust-mss 1360
+ tunnel source GigabitEthernet1.20
+ tunnel mode gre multipoint
+ tunnel key 2
+ tunnel vrf UNDERLAY
+ tunnel protection ipsec profile DMVPN_PROFILE
+!
+interface GigabitEthernet1
+ no ip address
+ negotiation auto
+ no mop enabled
+ no mop sysid
+!
+interface GigabitEthernet1.10
+ encapsulation dot1Q 10
+ vrf forwarding UNDERLAY
+ ip address 50.1.10.7 255.255.255.0
+ ipv6 address 2001:50:1:10::7/64
+!
+interface GigabitEthernet1.20
+ encapsulation dot1Q 20
+ vrf forwarding UNDERLAY
+ ip address 50.1.20.7 255.255.255.0
+ ipv6 address 2001:50:1:20::7/64
+!
+interface GigabitEthernet2
+ no ip address
+ shutdown
+ negotiation auto
+ no mop enabled
+ no mop sysid
+!
+interface GigabitEthernet3
+ ip address 192.168.200.107 255.255.255.0
+ negotiation auto
+ no mop enabled
+ no mop sysid
+!
+!
+router eigrp DMVPN
+ !
+ address-family ipv4 unicast autonomous-system 1
+  !
+  af-interface default
+   passive-interface
+  exit-af-interface
+  !
+  af-interface Tunnel0
+   no passive-interface
+  exit-af-interface
+  !
+  af-interface Tunnel1
+   no passive-interface
+  exit-af-interface
+  !
+  topology base
+  exit-af-topology
+  network 10.1.1.0 0.0.0.255
+  network 10.1.2.0 0.0.0.255
+  network 50.0.0.0
+ exit-address-family
+!
+ip forward-protocol nd
+ip http server
+ip http authentication local
+ip http secure-server
+!
+!
+!
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+line con 0
+ exec-timeout 0 0
+ stopbits 1
+line vty 0 4
+ login
+!
+!
+!
+!
+!
+!
+end
